@@ -1,70 +1,79 @@
-# Assignment - Internet of Things
+# 1DV027 IoT Assignment Submission
 
-Hardware and sensors are constantly added to our lives. Sensors produce data that often needs to be collected and analyzed. Having a basic knowledge of IoT protocols opens many doors for exciting projects as a web developer. 
+**Student:** Mattias Ubbesen  
+**Student ID:** mu222cu  
+**Course:** 1DV027 - Web as Application Platform
 
-This assignment focuses on analyzing IoT data and visualizing it on a web-based dashboard using a cloud platform. It aims to enhance your understanding of IoT data, API integration, and web-based data visualization.
+## Project Summary
 
-## Description
+This project implements a complete IoT sensor data pipeline using the TIG stack (Telegraf, InfluxDB, Grafana) with custom hardware sensors. Instead of using the provided university MQTT broker, I built my own end-to-end IoT solution with physical sensors, automated deployment, and production-grade infrastructure.
 
-You will receive data from Temp and Humidity, and Total Volatile Organic Compounds Sensor (TVOC) connected via WiFi gateway to MQTT broker. You need to subscribe to the MQTT broker. Create a web interface for this data and visualize it on a chart.
+### Architecture Overview
+- **Hardware**: Raspberry Pi Pico 2 WH with DHT-21 (temperature/humidity) and SGP30 (TVOC/eCO2) sensors
+- **Data Pipeline**: Custom sensors → WiFi → Mosquitto MQTT → Telegraf → InfluxDB → Grafana
+- **Infrastructure**: Multi-tier deployment across home and university networks using Docker and Tailscale VPN
 
-You can set up open-source tools to make collection, storage, and graphing such as The TIG (Telegraf, Influx, and Grafana) Stack, or explore alternative tools and methods that align with your interests and expertise.
+## Live Dashboard
 
-## Assignment Tasks
+**Public Dashboard Access:**  
+[https://cscloud6-198.lnu.se/iot/d/bev7oshi0qtj4d/1dv027-iot-assignment-dashboard](https://cscloud6-198.lnu.se/iot/d/bev7oshi0qtj4d/1dv027-iot-assignment-dashboard)
 
-1. **Subscribe to the provided MQTT broker** to receive real-time data from a Temp and Humidity, and TVOC sensor.
+## Project Repositories
 
-    MQTT broker details: 
-   - mqtt://cscloud7-148.lnu.se:1883
-   - user: iotlab
-   - pass: iotlab
-   - topic: as of now 'data/sht30' which holds temperature and humidity. Considering adding TVOC from another sensor aswell on a different topic.
-    format: json
+### 1. Hardware Repository: iot-hardware
+**URL:** [https://gitlab.lnu.se/mu222cu/iot-hardware](https://gitlab.lnu.se/mu222cu/iot-hardware)
 
-2. **Analyze the incoming data**, which includes:
-    - Temp and Humidity
-    - TVOC levels
-    - Timestamp of each reading
+Contains MicroPython code for Raspberry Pi Pico 2 WH with sensor integration. See repository README for detailed overview.
 
-3. **Choose Your Toolset:**
-    You can pick one of the following approaches to process, store, and visualize the data.
+**Deliverables:**
+- [`deliverables/hardware-setup.md`](https://gitlab.lnu.se/mu222cu/iot-hardware/-/blob/main/deliverables/hardware-setup.md) - Complete hardware setup documentation including pin configuration, software setup, and data collection features
 
-    ### Option 1: Telegraf + InfluxDB + Grafana (TIG Stack)
-    - **Telegraf**: Configure Telegraf to subscribe to the MQTT topic and collect data from the broker.
-    - **InfluxDB**: Store the incoming sensor data in InfluxDB, a time-series database.
-    - **Grafana**: Create a professional-grade dashboard in Grafana to visualize the CO2 and TVOC levels. Use features like real-time charts, dynamic thresholds, and historical data exploration.
+### 2. Development Infrastructure Repository: iot-dev
+**URL:** [https://gitlab.lnu.se/mu222cu/iot-dev](https://gitlab.lnu.se/mu222cu/iot-dev)
 
+Contains TIG stack infrastructure with automated deployment and configuration management. See repository README for detailed overview.
 
-    ### Option 2: Node.js + MongoDB + Frontend framework
-    - **MongoDB**: Use MongoDB to store sensor data. Explore and pick a strategy to optimize mongo for time-series data. 
-    - **Node.js**: Employ Node.js with MQTT.js to subscribe to the MQTT broker and process data into MongoDB.
-    - **React.js/Next.js/Angular etc**: Design a custom web interface with dynamic features like filtering and real-time updates.
-    - **Chart.js/D3.js**: Visualize data using Chart.js or D3.js for interactive charts and graphs.
-        
-## Deliverables
+**Deliverables:**
+- [`deliverables/technical-overview.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/technical-overview.md) - Complete technical architecture documentation covering data flow, infrastructure distribution, and time-series optimization strategies
+- [`deliverables/setup-documentation.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/setup-documentation.md) - Step-by-step setup instructions for local and remote deployment with automated scripts
+- [`deliverables/dashboard-url.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/dashboard-url.md) - Dashboard access information and feature summary
+- [`deliverables/dashboards/`](https://gitlab.lnu.se/mu222cu/iot-dev/-/tree/main/deliverables/dashboards) - Grafana dashboard export files and screenshots
 
-1. **Functional Dashboard:**
-    - A url to a dashboard built using the selected toolset.
+## Key Features
 
-2. **Configuration Files:**
-    - For TIG Stack: Provide the Telegraf configuration file, InfluxDB setup details, and Grafana dashboard export file.
-    - Provide the MongoDB schema or collection structure for storing sensor data.
-    - Share any necessary backend configuration files or scripts for connecting to MongoDB and processing data.
-    
-3. **Documentation:**
-    - Explain the setup process for your selected tool.
-    - Describe how data flows from the MQTT broker to your dashboard. 
-    - Describe the optimizations implemented for handling time-series data
+### Hardware Implementation
+- Real-time sensor data collection every 2 seconds
+- WiFi connectivity with automatic reconnection
+- NTP time synchronization for accurate timestamps
+- SGP30 baseline calibration with flash persistence
+- Comprehensive error handling and LED status indicators
 
-## Merge Request
-You hand in the assignment by making a Merge Request of your project against the lnu/submit-branch. It is OK to have additional projects and repositories, but include a link to them in the Submission report.
-Pay extra attention to including a link to your Assignment Report.
+### Infrastructure
+- Multi-environment deployment (local home server + university cloud)
+- Secure cross-network connectivity via Tailscale VPN
+- HTTPS-enforced public dashboard with nginx reverse proxy
+- Automated configuration management using templates and CI/CD
+- Service-oriented architecture with separated MQTT broker
 
-## Learning Outcomes
+### Data Pipeline Optimizations
+- InfluxDB v2 for time-series data optimization
+- Telegraf data type conversion ensuring proper float formatting
+- Organized data structure with measurements containing all sensor values
+- High-precision timestamp handling with timezone consistency
 
-By completing this assignment, you will:
-- Understand how to collect real-time data using MQTT.
-- Learn how to store and manage IoT data efficiently.
-- Gain hands-on experience with professional IoT tools.
-- Develop skills in creating dashboards and visualizing sensor data.
+### Dashboard Features
+- Real-time temperature, humidity, TVOC, and eCO2 monitoring
+- Calculated metrics including dew point and absolute humidity
+- Historical data exploration with time range selection
+- Public access for examiner review without authentication
 
+## Technical Highlights
+
+This implementation demonstrates:
+- End-to-end IoT solution development from hardware to visualization
+- Production-ready infrastructure with automation and monitoring
+- Security best practices with VPN connectivity and secret management
+- Scalable architecture supporting multiple sensors and locations
+- Professional DevOps practices with CI/CD and configuration templates
+
+The project goes beyond the basic assignment requirements by implementing a complete IoT ecosystem with custom hardware, automated deployment, and production-grade infrastructure suitable for real-world applications.
