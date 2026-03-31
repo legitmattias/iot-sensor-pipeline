@@ -1,79 +1,60 @@
-# 1DV027 IoT Assignment Submission
+# IoT Sensor Pipeline
 
-**Student:** Mattias Ubbesen  
-**Student ID:** mu222cu  
-**Course:** 1DV027 - Web as Application Platform
+A complete end-to-end IoT solution for environmental monitoring — from custom hardware sensors to real-time dashboards. Built with the TIG stack (Telegraf, InfluxDB, Grafana), MQTT, and MicroPython on a Raspberry Pi Pico 2 WH.
 
-## Project Summary
+## Architecture Overview
 
-This project implements a complete IoT sensor data pipeline using the TIG stack (Telegraf, InfluxDB, Grafana) with custom hardware sensors. Instead of using the provided university MQTT broker, I built my own end-to-end IoT solution with physical sensors, automated deployment, and production-grade infrastructure.
+```
+Pico 2 WH (sensors) → WiFi → Mosquitto MQTT → Telegraf → InfluxDB → Grafana
+```
 
-### Architecture Overview
 - **Hardware**: Raspberry Pi Pico 2 WH with DHT-21 (temperature/humidity) and SGP30 (TVOC/eCO2) sensors
 - **Data Pipeline**: Custom sensors → WiFi → Mosquitto MQTT → Telegraf → InfluxDB → Grafana
-- **Infrastructure**: Multi-tier deployment across home and university networks using Docker and Tailscale VPN
-
-## Live Dashboard
-
-**Public Dashboard Access:**  
-[https://cscloud6-198.lnu.se/iot/d/bev7oshi0qtj4d/1dv027-iot-assignment-dashboard](https://cscloud6-198.lnu.se/iot/d/bev7oshi0qtj4d/1dv027-iot-assignment-dashboard)
+- **Infrastructure**: Multi-tier deployment across home and cloud networks using Docker and Tailscale VPN
 
 ## Project Repositories
 
-### 1. Hardware Repository: iot-hardware
-**URL:** [https://gitlab.lnu.se/mu222cu/iot-hardware](https://gitlab.lnu.se/mu222cu/iot-hardware)
-
-Contains MicroPython code for Raspberry Pi Pico 2 WH with sensor integration. See repository README for detailed overview.
-
-**Deliverables:**
-- [`deliverables/hardware-setup.md`](https://gitlab.lnu.se/mu222cu/iot-hardware/-/blob/main/deliverables/hardware-setup.md) - Complete hardware setup documentation including pin configuration, software setup, and data collection features
-
-### 2. Development Infrastructure Repository: iot-dev
-**URL:** [https://gitlab.lnu.se/mu222cu/iot-dev](https://gitlab.lnu.se/mu222cu/iot-dev)
-
-Contains TIG stack infrastructure with automated deployment and configuration management. See repository README for detailed overview.
-
-**Deliverables:**
-- [`deliverables/technical-overview.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/technical-overview.md) - Complete technical architecture documentation covering data flow, infrastructure distribution, and time-series optimization strategies
-- [`deliverables/setup-documentation.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/setup-documentation.md) - Step-by-step setup instructions for local and remote deployment with automated scripts
-- [`deliverables/dashboard-url.md`](https://gitlab.lnu.se/mu222cu/iot-dev/-/blob/main/deliverables/dashboard-url.md) - Dashboard access information and feature summary
-- [`deliverables/dashboards/`](https://gitlab.lnu.se/mu222cu/iot-dev/-/tree/main/deliverables/dashboards) - Grafana dashboard export files and screenshots
+| Repository | Description |
+|---|---|
+| **[iot-sensor-platform](https://github.com/legitmattias/iot-sensor-platform)** | MicroPython edge device — sensor management, WiFi, MQTT publishing, auto-calibration |
+| **[iot-tig-infrastructure](https://github.com/legitmattias/iot-tig-infrastructure)** | TIG stack deployment — Docker, Telegraf, InfluxDB, Grafana, Mosquitto, nginx, Tailscale VPN |
 
 ## Key Features
 
-### Hardware Implementation
+### Hardware
 - Real-time sensor data collection every 2 seconds
-- WiFi connectivity with automatic reconnection
-- NTP time synchronization for accurate timestamps
 - SGP30 baseline calibration with flash persistence
-- Comprehensive error handling and LED status indicators
+- WiFi auto-reconnection and NTP time synchronization
+- LED status indicators and comprehensive error recovery
 
 ### Infrastructure
-- Multi-environment deployment (local home server + university cloud)
+- Multi-environment deployment (local home server + cloud)
 - Secure cross-network connectivity via Tailscale VPN
 - HTTPS-enforced public dashboard with nginx reverse proxy
-- Automated configuration management using templates and CI/CD
+- Automated configuration management with CI/CD
 - Service-oriented architecture with separated MQTT broker
 
-### Data Pipeline Optimizations
-- InfluxDB v2 for time-series data optimization
+### Data Pipeline
+- InfluxDB v2 for time-series optimization
 - Telegraf data type conversion ensuring proper float formatting
-- Organized data structure with measurements containing all sensor values
 - High-precision timestamp handling with timezone consistency
 
-### Dashboard Features
+### Dashboard
 - Real-time temperature, humidity, TVOC, and eCO2 monitoring
 - Calculated metrics including dew point and absolute humidity
 - Historical data exploration with time range selection
-- Public access for examiner review without authentication
 
 ## Technical Highlights
 
-This implementation demonstrates:
-- End-to-end IoT solution development from hardware to visualization
+- End-to-end IoT solution from hardware to visualization
 - Production-ready infrastructure with automation and monitoring
 - Security best practices with VPN connectivity and secret management
 - Scalable architecture supporting multiple sensors and locations
 - Professional DevOps practices with CI/CD and configuration templates
 
-The project goes beyond the basic assignment requirements by implementing a complete IoT ecosystem with custom hardware, automated deployment, and production-grade infrastructure suitable for real-world applications.
+## Documentation
+
+- [Hardware Setup](https://github.com/legitmattias/iot-sensor-platform/blob/main/deliverables/hardware-setup.md) — Pin configuration, software setup, data collection features
+- [Technical Overview](https://github.com/legitmattias/iot-tig-infrastructure/blob/main/deliverables/technical-overview.md) — Architecture, data flow, time-series optimization
+- [Setup Guide](https://github.com/legitmattias/iot-tig-infrastructure/blob/main/deliverables/setup-documentation.md) — Step-by-step local and remote deployment
+- [Dashboard Exports](https://github.com/legitmattias/iot-tig-infrastructure/tree/main/deliverables/dashboards) — Grafana dashboard JSON and screenshots
